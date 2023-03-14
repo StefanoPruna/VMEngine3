@@ -1,0 +1,17 @@
+#version 460 core
+
+layout(location = 0) in vec3 InPosition; // get the 0 attribute pointer
+layout(location = 2) in vec2 InTextCoords; // get the 2 attr pointer
+
+uniform mat4 model = mat4(1.0); //mat4(1.0,1.0,1.0,1.0,)
+uniform mat4 view = mat4(1.0); 
+uniform mat4 projection = mat4(1.0); 
+
+out vec2 TextCoords;
+
+void main()
+{
+	gl_Position = projection * view * model * vec4(InPosition, 1.0);
+	
+	TextCoords = InTextCoords;
+}
