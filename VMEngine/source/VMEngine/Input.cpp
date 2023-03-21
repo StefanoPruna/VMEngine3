@@ -93,6 +93,6 @@ void Input::OnMouseMove(SDL_MouseMotionEvent& MEvent)
 
 void Input::OnMouseScroll(SDL_MouseWheelEvent& MEvent)
 {
-	//increase the Delta relatvie to how much was scrolled
+	//increase the Delta relative to how much was scrolled
 	ScrollDelta += MEvent.preciseY;
 }

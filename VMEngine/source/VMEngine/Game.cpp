@@ -155,6 +155,10 @@ void Game::Update()
 	//move camera down
 	if (GameInput->IsKeyDown(SDL_SCANCODE_Q))
 		CameraInput += -CamDirections.Up;
+	//If the C key is pressed, it should reset the camera to its FOV degrees, 
+	//but I cannot make it work
+	if (GameInput->IsKeyDown(SDL_SCANCODE_C))
+		Graphics->EngineDefaultCam->GetCameraData().FOV;
 
 	CameraInput *= 3.0f * GetFDeltaTime();
 
