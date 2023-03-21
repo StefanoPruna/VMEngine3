@@ -5,6 +5,7 @@
 #include "VMEngine/Graphics/Mesh.h"
 #include <SDL2/SDL.h>
 #include "VMEngine/Input.h"
+#include "VMEngine/Graphics/Camera.h"
 
 Game& Game::GetGameInstance()
 {
@@ -62,16 +63,16 @@ void Game::Run()
 		//Created the texture
 		TexturePtr TConcrete = Graphics->CreateTexture("Game/Textures/brick_pavement.jpg");
 		TexturePtr TGrid = Graphics->CreateTexture("Game/Textures/goldCoins.png");
-		TexturePtr TStones = Graphics->CreateTexture("Game/Textures/SquareStones.jpg");
+		TexturePtr TBackground = Graphics->CreateTexture("Game/Textures/SquareStones.jpg");
 		TexturePtr TBricks = Graphics->CreateTexture("Game/Textures/SquareBrown.jpg");
 
 		//Create the vertex/meshes
 		Poly = Graphics->CreateSimpleMeshShape(GeometricShapes::Cube, TextureShader, { TConcrete });
-		Cube = Graphics->CreateSimpleMeshShape(GeometricShapes::Polygon, TextureShader, { TGrid });
+		Cube = Graphics->CreateSimpleMeshShape(GeometricShapes::Cube, TextureShader, { TGrid });
 
 		//created transformation for the meshes
-		Poly->Transform.Location.x = -0.5f;	
-		Cube->Transform.Location.x = 1.0f;
+		Poly->Transform.Location = Vector3(-1.0f, 0.0f, 1.0f);
+		Cube->Transform.Location = Vector3(1.0f, 0.0f, -1.0f);
 	}
 
 	while (!bIsGameOver)
@@ -114,29 +115,63 @@ void Game::Update()
 	Cube->Transform.Rotation.y += -25.0f * GetFDeltaTime();
 
 	Vector3 CameraInput = Vector3(0.0f);
+	CDirection CamDirections = Graphics->EngineDefaultCam->GetDirections();
+
+	//Moving objects right and left, or up and down
+	static int Move = 1.0f;
+	//Move up and down
+	if (Cube->Transform.Location.y > 2.5f)
+		Move = -1.0f;
+
+	if (Cube->Transform.Location.y < -2.5f)
+		Move = 1.0f;
+	//speed of the object
+	Cube->Transform.Location.y += (1.5f * Move) * GetFDeltaTime();
+
+	//right and left
+	if (Poly->Transform.Location.x > 3.0f)
+		Move = -1.0f;
+
+	if (Poly->Transform.Location.x < -3.0f)
+		Move = 1.0f;
+	//speed of the object
+	Poly->Transform.Location.x += (1.0f * Move) * GetFDeltaTime();
 
 	//move camera forward
 	if (GameInput->IsKeyDown(SDL_SCANCODE_W))
-		CameraInput.z = 1.0f;
+		CameraInput += CamDirections.Forward;
 	//move camera backward
 	if (GameInput->IsKeyDown(SDL_SCANCODE_S))
-		CameraInput.z = -1.0f;
+		CameraInput += -CamDirections.Forward;
 	//move camera left
 	if (GameInput->IsKeyDown(SDL_SCANCODE_A))
-		CameraInput.x = 1.0f;
+		CameraInput += -CamDirections.Right;
 	//move camera right
 	if (GameInput->IsKeyDown(SDL_SCANCODE_D))
-		CameraInput.x = -1.0f;
+		CameraInput += CamDirections.Right;
 	//move camera up
-	if (GameInput->IsKeyDown(SDL_SCANCODE_Q))
-		CameraInput.y = -1.0f;
-	//move camera down
 	if (GameInput->IsKeyDown(SDL_SCANCODE_E))
-		CameraInput.y = 1.0f;
+		CameraInput += CamDirections.Up;
+	//move camera down
+	if (GameInput->IsKeyDown(SDL_SCANCODE_Q))
+		CameraInput += -CamDirections.Up;
 
-	CameraInput *= 2.0f * GetFDeltaTime();
+	CameraInput *= 3.0f * GetFDeltaTime();
 
-	Graphics->EngineDefaultCam += CameraInput;
+	Vector3 NewLocation = Graphics->EngineDefaultCam->GetTransforms().Location += CameraInput;
+	Graphics->EngineDefaultCam->Translate(NewLocation);
+
+	if (GameInput->IsMouseButtonDown(MouseButtons::RIGHT))
+	{
+		Graphics->EngineDefaultCam->RotatePitch(-GameInput->MouseYDelta * GetFDeltaTime() * 25.0f);
+		Graphics->EngineDefaultCam->RotateYaw(GameInput->MouseXDelta * GetFDeltaTime() * 25.0f);
+	}
+		
+	////test mouse inputs
+	//if (GameInput->IsMouseButtonDown(MouseButtons::MIDDLE))
+	//	cout << "middle mouse button down" << endl;
+	//else
+	//	cout << "middle mouse button up" << endl;
 }
 
 void Game::Draw()

@@ -35,8 +35,8 @@ public:
 	//create the 3D space for the model to relate itself to screen and camera coordinates
 	void ApplyScreenTransformations(ShaderPtr Shader);
 
-	//var for the default camera
-	Vector3 EngineDefaultCam;
+	//default camera
+	CameraPtr EngineDefaultCam;
 private:
 	SDL_Window* SdlWindow;
 

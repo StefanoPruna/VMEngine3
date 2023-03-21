@@ -28,6 +28,9 @@ class Mesh;
 typedef shared_ptr<Mesh> MeshPtr;
 typedef vector<MeshPtr> MeshPtrStack;
 
+class Camera;
+typedef shared_ptr<Camera> CameraPtr;
+
 //For shape data and VAOs Matrices
 typedef vector<float> PositionMatrix;
 typedef vector<vmuint> IndicesMatrix;
