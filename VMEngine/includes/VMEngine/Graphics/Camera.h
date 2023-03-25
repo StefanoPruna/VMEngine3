@@ -9,7 +9,7 @@ struct STCameraData
 
 	//it looks like a camera zoom, but it's just getting closer/cliper to the objects
 	//in degrees
-	float FOV = 70.0f;
+	float FOV = 90.0f;
 
 	//how close models can get to the camera before disappearing
 	float NearClip = 0.01f;

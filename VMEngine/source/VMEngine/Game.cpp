@@ -129,10 +129,10 @@ void Game::Update()
 	Cube->Transform.Location.y += (1.5f * Move) * GetFDeltaTime();
 
 	//right and left
-	if (Poly->Transform.Location.x > 3.0f)
+	if (Poly->Transform.Location.z > 3.0f)
 		Move = -1.0f;
 
-	if (Poly->Transform.Location.x < -3.0f)
+	if (Poly->Transform.Location.z < -3.0f)
 		Move = 1.0f;
 	//speed of the object
 	Poly->Transform.Location.x += (1.0f * Move) * GetFDeltaTime();
