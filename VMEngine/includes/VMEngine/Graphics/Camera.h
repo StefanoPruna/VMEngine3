@@ -15,6 +15,9 @@ struct STCameraData
 	float NearClip = 0.01f;
 	//how far models can get to the camera before disappearing
 	float FarClip = 1000.0f;
+
+	//the speed at which the camera turn is multiplied
+	float LookSensitivity = 20.0f;
 };
 
 class Camera
@@ -24,6 +27,8 @@ public:
 
 	//Move camera in 3D space to a location
 	void Translate(Vector3 Location);
+
+	void AddMovementInput(Vector3 Direction);
 
 	//return the transform data
 	CTransform GetTransforms() const { return Transform; }

@@ -1,5 +1,6 @@
 #pragma once
 #include "VMEngine/CoreMinimal.h"
+#include "Vertex.h"
 
 const PositionMatrix TrianglePositions
 {
@@ -120,7 +121,10 @@ const IndicesMatrix CubeIndicies{
 class VertexArrayObject
 {
 public:
+	//creates our simple mesh VAO
 	VertexArrayObject(GeometricShapes ChosenShape);
+	//create a complex mesh VAO from the importer
+	VertexArrayObject(vector<Vertex> Vertices, vector<vmuint> Indices);
 	~VertexArrayObject();
 
 	void Draw();
@@ -134,4 +138,8 @@ private:
 	//VAB ID FOR THE VERTICES
 	//EAB ID FOR THE INDICES
 	vmuint ID, VAB, EAB;
+
+	//for importing complex meshes
+	vector<Vertex> Vertices;
+	vector<vmuint> Indices;
 };

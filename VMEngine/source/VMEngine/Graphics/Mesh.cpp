@@ -1,6 +1,6 @@
 #include "VMEngine/Graphics/Mesh.h"
 #include "VMEngine/Graphics/ShaderProgram.h"
-#include "VMEngine/Graphics/Texture.h"
+#include "VMEngine/Graphics/Material.h"
 #include "VMEngine/Graphics/VertexArrayObject.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "VMEngine/Game.h"
@@ -18,13 +18,13 @@ Mesh::Mesh()
 Mesh::~Mesh()
 {
 	MeshShader = nullptr;
-	MeshTextures.clear();
+	MeshMaterial = nullptr;
 	MeshVAO = nullptr;
 
 	cout << "Mesh | Mesh Destroyed" << endl;
 }
 
-bool Mesh::CreateSimpleShape(GeometricShapes Shape, ShaderPtr MeshShader, TexturePtrStack MeshTextures)
+bool Mesh::CreateSimpleShape(GeometricShapes Shape, ShaderPtr MeshShader, MaterialPtr MeshMaterial)
 {
 	cout << "Mesh | Creating a Mesh" << endl;
 
@@ -40,7 +40,7 @@ bool Mesh::CreateSimpleShape(GeometricShapes Shape, ShaderPtr MeshShader, Textur
 
 	//without the pointer(this) it won't work
 	this->MeshShader = MeshShader;
-	this->MeshTextures = MeshTextures;
+	this->MeshMaterial = MeshMaterial;
 
 	cout << "Mesh | Created a Mesh successfully" << endl;
 
@@ -51,15 +51,8 @@ void Mesh::Draw()
 {
 	MeshShader->RunShader();
 
-	for (vmuint Index = 0; Index < MeshTextures.size(); Index++)
-	{
-		//Activating the texture through OpenGL
-		MeshTextures[Index]->ActivateTexture(Index);
-		//setting the textures number as the active texture in the shader
-		MeshShader->SetInt("TextureColour", Index);
-		//binding the texture to the shader
-		MeshTextures[Index]->BindTexture();
-	}
+	if (MeshMaterial != nullptr)
+		MeshMaterial->Draw(MeshShader);
 
 	//Initialise a static variable to check if any changes to transform
 	static CTransform OldTransform;

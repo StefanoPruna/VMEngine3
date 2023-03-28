@@ -6,6 +6,7 @@
 #include <SDL2/SDL.h>
 #include "VMEngine/Input.h"
 #include "VMEngine/Graphics/Camera.h"
+#include "VMEngine/Graphics/Material.h"
 
 Game& Game::GetGameInstance()
 {
@@ -31,6 +32,11 @@ void Game::Start(const char* WTitle, bool bFullscreen, int WWidth, int WHeight)
 	}
 
 	Run();
+}
+
+TexturePtr Game::GetDefaultEngineTexture()
+{
+	return Graphics->DefaultEngineTexture;
 }
 
 Game::Game()
@@ -66,9 +72,16 @@ void Game::Run()
 		TexturePtr TBackground = Graphics->CreateTexture("Game/Textures/SquareStones.jpg");
 		TexturePtr TBricks = Graphics->CreateTexture("Game/Textures/SquareBrown.jpg");
 
+		//create the materials
+		MaterialPtr MConcrete = make_shared<Material>();
+		MaterialPtr MGrid = make_shared<Material>();
+
+		MConcrete->BaseColour = TConcrete;
+		MGrid->BaseColour = TGrid;
+
 		//Create the vertex/meshes
-		Poly = Graphics->CreateSimpleMeshShape(GeometricShapes::Cube, TextureShader, { TConcrete });
-		Cube = Graphics->CreateSimpleMeshShape(GeometricShapes::Cube, TextureShader, { TGrid });
+		Poly = Graphics->CreateSimpleMeshShape(GeometricShapes::Cube, TextureShader, MConcrete);
+		Cube = Graphics->CreateSimpleMeshShape(GeometricShapes::Cube, TextureShader, MGrid);
 
 		//created transformation for the meshes
 		Poly->Transform.Location = Vector3(-1.0f, 0.0f, 1.0f);
@@ -155,21 +168,27 @@ void Game::Update()
 	//move camera down
 	if (GameInput->IsKeyDown(SDL_SCANCODE_Q))
 		CameraInput += -CamDirections.Up;
-	//If the C key is pressed, it should reset the camera to its FOV degrees, 
-	//but I cannot make it work
-	if (GameInput->IsKeyDown(SDL_SCANCODE_C))
-		Graphics->EngineDefaultCam->GetCameraData().FOV;
 
-	CameraInput *= 3.0f * GetFDeltaTime();
+	////If the C key is pressed, it should reset the camera to its FOV degrees, 
+	////but I cannot make it work
+	//if (GameInput->IsKeyDown(SDL_SCANCODE_C))
+	//	Graphics->EngineDefaultCam->GetCameraData().FOV;
+
+	/*CameraInput *= 3.0f * GetFDeltaTime();
 
 	Vector3 NewLocation = Graphics->EngineDefaultCam->GetTransforms().Location += CameraInput;
-	Graphics->EngineDefaultCam->Translate(NewLocation);
+	Graphics->EngineDefaultCam->Translate(NewLocation);*/
+
+	Graphics->EngineDefaultCam->AddMovementInput(CameraInput);
 
 	if (GameInput->IsMouseButtonDown(MouseButtons::RIGHT))
 	{
-		Graphics->EngineDefaultCam->RotatePitch(-GameInput->MouseYDelta * GetFDeltaTime() * 25.0f);
-		Graphics->EngineDefaultCam->RotateYaw(GameInput->MouseXDelta * GetFDeltaTime() * 25.0f);
+		Graphics->EngineDefaultCam->RotatePitch(-GameInput->MouseYDelta * GetFDeltaTime());
+		Graphics->EngineDefaultCam->RotateYaw(GameInput->MouseXDelta * GetFDeltaTime());
+		GameInput->ShowCursor(false);
 	}
+	else
+		GameInput->ShowCursor(true);
 		
 	////test mouse inputs
 	//if (GameInput->IsMouseButtonDown(MouseButtons::MIDDLE))

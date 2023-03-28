@@ -23,8 +23,8 @@ public:
 
 	SDL_Window* GetWindow() const;
 
-	//Add a new VAO to the VAOStack using a shape
-	MeshPtr CreateSimpleMeshShape(GeometricShapes Shape, ShaderPtr MeshShader, TexturePtrStack MeshTextures);
+	//Add a new 
+	MeshPtr CreateSimpleMeshShape(GeometricShapes Shape, ShaderPtr MeshShader, MaterialPtr MeshMaterial);
 
 	ShaderPtr CreateShader(VFShaderParams ShaderFilePahts);
 
@@ -37,6 +37,9 @@ public:
 
 	//default camera
 	CameraPtr EngineDefaultCam;
+
+	//default texture
+	TexturePtr DefaultEngineTexture;
 private:
 	SDL_Window* SdlWindow;
 

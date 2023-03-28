@@ -110,7 +110,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)/VMEngine/lib/</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;opengl32.lib;assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(SolutionDir)\VMEngine\lib\*.dll" "$(SolutionDir)$(Platform)\$(Configuration)"</Command>
@@ -138,9 +138,11 @@
     <ClInclude Include="includes\VMEngine\Game.h" />
     <ClInclude Include="includes\VMEngine\Graphics\Camera.h" />
     <ClInclude Include="includes\VMEngine\Graphics\GraphicsEngine.h" />
+    <ClInclude Include="includes\VMEngine\Graphics\Material.h" />
     <ClInclude Include="includes\VMEngine\Graphics\Mesh.h" />
     <ClInclude Include="includes\VMEngine\Graphics\ShaderProgram.h" />
     <ClInclude Include="includes\VMEngine\Graphics\Texture.h" />
+    <ClInclude Include="includes\VMEngine\Graphics\Vertex.h" />
     <ClInclude Include="includes\VMEngine\Graphics\VertexArrayObject.h" />
     <ClInclude Include="includes\VMEngine\Input.h" />
     <ClInclude Include="includes\VMEngine\Math\Transformations.h" />
@@ -151,6 +153,7 @@
     <ClCompile Include="source\VMEngine\Game.cpp" />
     <ClCompile Include="source\VMEngine\Graphics\Camera.cpp" />
     <ClCompile Include="source\VMEngine\Graphics\GraphicsEngine.cpp" />
+    <ClCompile Include="source\VMEngine\Graphics\Material.cpp" />
     <ClCompile Include="source\VMEngine\Graphics\Mesh.cpp" />
     <ClCompile Include="source\VMEngine\Graphics\ShaderProgram.cpp" />
     <ClCompile Include="source\VMEngine\Graphics\Texture.cpp" />

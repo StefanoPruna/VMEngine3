@@ -31,6 +31,9 @@ public:
 	//how far the player has scrolled since the last frame
 	float ScrollDelta;
 
+	//Change/Set the visibility of the cursor
+	void ShowCursor(bool bVisibility);
+
 private:
 	//keyboard current states
 	const Uint8* KeyboardState;
