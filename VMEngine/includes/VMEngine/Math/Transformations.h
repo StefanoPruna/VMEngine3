@@ -2,6 +2,7 @@
 #include "glm/glm.hpp"
 
 typedef glm::vec3 Vector3;
+typedef glm::vec2 Vector2;
 
 //C for Coordinates
 //Struct everything is public

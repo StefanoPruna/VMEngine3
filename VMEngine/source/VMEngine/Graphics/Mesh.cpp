@@ -18,13 +18,12 @@ Mesh::Mesh()
 Mesh::~Mesh()
 {
 	MeshShader = nullptr;
-	MeshMaterial = nullptr;
 	MeshVAO = nullptr;
 
 	cout << "Mesh | Mesh Destroyed" << endl;
 }
 
-bool Mesh::CreateSimpleShape(GeometricShapes Shape, ShaderPtr MeshShader, MaterialPtr MeshMaterial)
+bool Mesh::CreateSimpleShape(GeometricShapes Shape, ShaderPtr MeshShader, vmuint MaterialSlot)
 {
 	cout << "Mesh | Creating a Mesh" << endl;
 
@@ -40,14 +39,37 @@ bool Mesh::CreateSimpleShape(GeometricShapes Shape, ShaderPtr MeshShader, Materi
 
 	//without the pointer(this) it won't work
 	this->MeshShader = MeshShader;
-	this->MeshMaterial = MeshMaterial;
+	this->MaterialSlot = MaterialSlot;
 
 	cout << "Mesh | Created a Mesh successfully" << endl;
 
 	return true;
 }
 
-void Mesh::Draw()
+bool Mesh::CreateMesh(vector<Vertex> Vertices, vector<vmuint> Indices, ShaderPtr MeshShader, vmuint MaterialSlot)
+{
+	cout << "Mesh | Creating a Imported Mesh" << endl;
+
+	//create a VAO
+	MeshVAO = make_shared<VAO>(Vertices, Indices);
+
+	//validate the mesh was created
+	if (MeshVAO == nullptr)
+	{
+		cout << "Mesh | Mesh failed to be created" << endl;
+		return false;
+	}
+
+	//without the pointer(this) it won't work
+	this->MeshShader = MeshShader;
+	this->MaterialSlot = MaterialSlot;
+
+	cout << "Mesh | Created a Mesh successfully" << endl;
+
+	return true;
+}
+
+void Mesh::Draw(MaterialPtr MeshMaterial)
 {
 	MeshShader->RunShader();
 

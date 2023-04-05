@@ -140,6 +140,7 @@
     <ClInclude Include="includes\VMEngine\Graphics\GraphicsEngine.h" />
     <ClInclude Include="includes\VMEngine\Graphics\Material.h" />
     <ClInclude Include="includes\VMEngine\Graphics\Mesh.h" />
+    <ClInclude Include="includes\VMEngine\Graphics\Model.h" />
     <ClInclude Include="includes\VMEngine\Graphics\ShaderProgram.h" />
     <ClInclude Include="includes\VMEngine\Graphics\Texture.h" />
     <ClInclude Include="includes\VMEngine\Graphics\Vertex.h" />
@@ -155,6 +156,7 @@
     <ClCompile Include="source\VMEngine\Graphics\GraphicsEngine.cpp" />
     <ClCompile Include="source\VMEngine\Graphics\Material.cpp" />
     <ClCompile Include="source\VMEngine\Graphics\Mesh.cpp" />
+    <ClCompile Include="source\VMEngine\Graphics\Model.cpp" />
     <ClCompile Include="source\VMEngine\Graphics\ShaderProgram.cpp" />
     <ClCompile Include="source\VMEngine\Graphics\Texture.cpp" />
     <ClCompile Include="source\VMEngine\Graphics\VertexArrayObject.cpp" />

@@ -2,7 +2,7 @@
 #include "VMEngine/Graphics/GraphicsEngine.h"
 #include "VMEngine/Graphics/ShaderProgram.h"
 #include "VMEngine/Graphics/Texture.h"
-#include "VMEngine/Graphics/Mesh.h"
+#include "VMEngine/Graphics/Model.h"
 #include <SDL2/SDL.h>
 #include "VMEngine/Input.h"
 #include "VMEngine/Graphics/Camera.h"
@@ -39,6 +39,11 @@ TexturePtr Game::GetDefaultEngineTexture()
 	return Graphics->DefaultEngineTexture;
 }
 
+MaterialPtr Game::GetDefaultEngineMaterial()
+{
+	return Graphics->DefaultEngineMaterial;
+}
+
 Game::Game()
 {
 	cout << "Game Initialised" << endl;
@@ -67,25 +72,70 @@ void Game::Run()
 			});
 
 		//Created the texture
-		TexturePtr TConcrete = Graphics->CreateTexture("Game/Textures/brick_pavement.jpg");
-		TexturePtr TGrid = Graphics->CreateTexture("Game/Textures/goldCoins.png");
-		TexturePtr TBackground = Graphics->CreateTexture("Game/Textures/SquareStones.jpg");
-		TexturePtr TBricks = Graphics->CreateTexture("Game/Textures/SquareBrown.jpg");
+		//TexturePtr TConcrete = Graphics->CreateTexture("Game/Textures/brick_pavement.jpg");
+		TexturePtr TGoldCoins = Graphics->CreateTexture("Game/Textures/goldCoins.png");
+		TexturePtr TRedCoins = Graphics->CreateTexture("Game/Textures/goldCoins.png");
+		TexturePtr TBackground = Graphics->CreateTexture("Game/Textures/Entrytunnel.jpg");
+		//TexturePtr TBricks = Graphics->CreateTexture("Game/Textures/SquareBrown.jpg");
 
 		//create the materials
-		MaterialPtr MConcrete = make_shared<Material>();
-		MaterialPtr MGrid = make_shared<Material>();
+		//MaterialPtr MConcrete = make_shared<Material>();
+		MaterialPtr MGoldCoins = make_shared<Material>();
+		MaterialPtr MRedCoins = make_shared<Material>();
+		MaterialPtr MBackground = make_shared<Material>();
 
-		MConcrete->BaseColour = TConcrete;
-		MGrid->BaseColour = TGrid;
+		MGoldCoins->BaseColour = TGoldCoins;
+		MRedCoins->BaseColour = TRedCoins;
+		MBackground->BaseColour = TBackground;
 
 		//Create the vertex/meshes
-		Poly = Graphics->CreateSimpleMeshShape(GeometricShapes::Cube, TextureShader, MConcrete);
-		Cube = Graphics->CreateSimpleMeshShape(GeometricShapes::Cube, TextureShader, MGrid);
+		GoldCoin = Graphics->CreateSimpleModelShape(GeometricShapes::Cube, TextureShader);
+		RedCoin = Graphics->CreateSimpleModelShape(GeometricShapes::Cube, TextureShader);
+		Background = Graphics->CreateSimpleModelShape(GeometricShapes::Cube, TextureShader);
+		//Wall = Graphics->CreateSimpleModelShape(GeometricShapes::Cube, TextureShader);
+
+		//set materials 
+		GoldCoin->SetMaterialBySlot(0, MGoldCoins);
+		RedCoin->SetMaterialBySlot(0, MRedCoins);
+		Background->SetMaterialBySlot(0, MBackground);
 
 		//created transformation for the meshes
-		Poly->Transform.Location = Vector3(-1.0f, 0.0f, 1.0f);
-		Cube->Transform.Location = Vector3(1.0f, 0.0f, -1.0f);
+		GoldCoin->Transform.Location = Vector3(-1.0f, 0.0f, 1.0f);
+		RedCoin->Transform.Location = Vector3(1.0f, 0.0f, -1.0f);
+		Background->Transform.Scale = Vector3(10.0f);
+		Background->Transform.Location = Vector3(-1.0f, 0.0f, 1.0f);
+		
+		//import custom meshes
+		Wall = Graphics->ImportModel("Game/Models/source/WallDamaged.obj", TextureShader);
+		Wall2 = Graphics->ImportModel("Game/Models/source/WallDamaged.obj", TextureShader);
+		Wall3 = Graphics->ImportModel("Game/Models/source/sci-fi_wall.obj", TextureShader);
+		
+		//transform the meshes
+		Wall->Transform.Scale = Vector3(0.1f);
+		//Wall->Transform.Rotation.z = 90.0f;
+		Wall->Transform.Location = Vector3(15.0f, -3.0f, -5.0f);
+		Wall2->Transform.Scale = Vector3(0.1f);
+		Wall2->Transform.Location = Vector3(15.0f, -3.0f, 7.0f);
+		Wall3->Transform.Rotation.x = 90.0f;
+		Wall3->Transform.Location = Vector3(10.0f, -3.0f, 0.0f);
+
+		//create the texture
+		TexturePtr TWall = Graphics->CreateTexture("Game/Textures/WallDamaged.png");
+		TexturePtr TWall2 = Graphics->CreateTexture("Game/Textures/spacescene.jpg");
+		TexturePtr TWall3 = Graphics->CreateTexture("Game/Textures/TexturesCom.jpg");
+
+		//create the material
+		MaterialPtr MWall = make_shared<Material>();
+		MWall->BaseColour = TWall;
+		MaterialPtr MWall2 = make_shared<Material>();
+		MWall2->BaseColour = TWall2;
+		MaterialPtr MWall3 = make_shared<Material>();
+		MWall3->BaseColour = TWall3;
+
+		//apply the material
+		Wall->SetMaterialBySlot(1, MWall);
+		Wall2->SetMaterialBySlot(1, MWall2);
+		Wall3->SetMaterialBySlot(1, MWall3);
 	}
 
 	while (!bIsGameOver)
@@ -119,13 +169,13 @@ void Game::Update()
 	//update the last frame time for the next update
 	LastFrameTime = CurrentFrameTime;
 
-	Poly->Transform.Rotation.z += 25.0f * GetFDeltaTime();
-	Poly->Transform.Rotation.x += 25.0f * GetFDeltaTime();
-	Poly->Transform.Rotation.y += 25.0f * GetFDeltaTime();
+	RedCoin->Transform.Rotation.z += 25.0f * GetFDeltaTime();
+	RedCoin->Transform.Rotation.x += 25.0f * GetFDeltaTime();
+	RedCoin->Transform.Rotation.y += 25.0f * GetFDeltaTime();
 
-	Cube->Transform.Rotation.z += -25.0f * GetFDeltaTime();
-	Cube->Transform.Rotation.x += -25.0f * GetFDeltaTime();
-	Cube->Transform.Rotation.y += -25.0f * GetFDeltaTime();
+	GoldCoin->Transform.Rotation.z += -25.0f * GetFDeltaTime();
+	GoldCoin->Transform.Rotation.x += -25.0f * GetFDeltaTime();
+	GoldCoin->Transform.Rotation.y += -25.0f * GetFDeltaTime();
 
 	Vector3 CameraInput = Vector3(0.0f);
 	CDirection CamDirections = Graphics->EngineDefaultCam->GetDirections();
@@ -133,22 +183,22 @@ void Game::Update()
 	//Moving objects right and left, or up and down
 	static int Move = 1.0f;
 	//Move up and down
-	if (Cube->Transform.Location.y > 2.5f)
+	if (GoldCoin->Transform.Location.y > 2.5f)
 		Move = -1.0f;
 
-	if (Cube->Transform.Location.y < -2.5f)
+	if (GoldCoin->Transform.Location.y < -2.5f)
 		Move = 1.0f;
 	//speed of the object
-	Cube->Transform.Location.y += (1.5f * Move) * GetFDeltaTime();
+	GoldCoin->Transform.Location.y += (1.5f * Move) * GetFDeltaTime();
 
 	//right and left
-	if (Poly->Transform.Location.z > 3.0f)
+	if (RedCoin->Transform.Location.z > 3.0f)
 		Move = -1.0f;
 
-	if (Poly->Transform.Location.z < -3.0f)
+	if (RedCoin->Transform.Location.z < -3.0f)
 		Move = 1.0f;
 	//speed of the object
-	Poly->Transform.Location.x += (1.0f * Move) * GetFDeltaTime();
+	RedCoin->Transform.Location.x += (1.0f * Move) * GetFDeltaTime();
 
 	//move camera forward
 	if (GameInput->IsKeyDown(SDL_SCANCODE_W))
