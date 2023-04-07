@@ -108,21 +108,21 @@ void Game::Run()
 		//import custom meshes
 		Wall = Graphics->ImportModel("Game/Models/source/WallDamaged.obj", TextureShader);
 		Wall2 = Graphics->ImportModel("Game/Models/source/WallDamaged.obj", TextureShader);
-		Wall3 = Graphics->ImportModel("Game/Models/source/sci-fi_wall.obj", TextureShader);
+		Wall3 = Graphics->ImportModel("Game/Models/source/WallDamaged.obj", TextureShader);
 		
 		//transform the meshes
 		Wall->Transform.Scale = Vector3(0.1f);
-		//Wall->Transform.Rotation.z = 90.0f;
-		Wall->Transform.Location = Vector3(15.0f, -3.0f, -5.0f);
+		Wall->Transform.Location = Vector3(15.0f, -3.0f, -4.0f);
 		Wall2->Transform.Scale = Vector3(0.1f);
-		Wall2->Transform.Location = Vector3(15.0f, -3.0f, 7.0f);
+		Wall2->Transform.Location = Vector3(15.0f, -3.0f, 6.0f);
+		Wall3->Transform.Scale = Vector3(0.1f);
 		Wall3->Transform.Rotation.x = 90.0f;
-		Wall3->Transform.Location = Vector3(10.0f, -3.0f, 0.0f);
+		Wall3->Transform.Location = Vector3(15.0f, -3.0f, -3.0f);
 
 		//create the texture
-		TexturePtr TWall = Graphics->CreateTexture("Game/Textures/WallDamaged.png");
-		TexturePtr TWall2 = Graphics->CreateTexture("Game/Textures/spacescene.jpg");
-		TexturePtr TWall3 = Graphics->CreateTexture("Game/Textures/TexturesCom.jpg");
+		TexturePtr TWall = Graphics->CreateTexture("Game/Textures/Background2.jpg");
+		TexturePtr TWall2 = Graphics->CreateTexture("Game/Textures/Background2.jpg");
+		TexturePtr TWall3 = Graphics->CreateTexture("Game/Textures/spacescene.jpg");
 
 		//create the material
 		MaterialPtr MWall = make_shared<Material>();
