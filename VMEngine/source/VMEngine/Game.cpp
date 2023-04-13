@@ -7,6 +7,7 @@
 #include "VMEngine/Input.h"
 #include "VMEngine/Graphics/Camera.h"
 #include "VMEngine/Graphics/Material.h"
+#include "VMEngine/Menu.h"
 
 Game& Game::GetGameInstance()
 {
@@ -65,77 +66,76 @@ void Game::Run()
 	{
 		GameInput = new Input();
 
+		/*Menu* menu = new Menu();
+
+		menu->getMenu();*/
+
 		//create a shader
 		ShaderPtr TextureShader = Graphics->CreateShader({
 			L"Game/Shaders/TextureShader/TextureShader.svert",
 			L"Game/Shaders/TextureShader/TextureShader.sfrag"
 			});
+		
+		//import custom meshes
+		Wall = Graphics->ImportModel("Game/Models/source/WallDamaged.obj", TextureShader);//Wall on the left
+		Wall2 = Graphics->ImportModel("Game/Models/source/WallDamaged.obj", TextureShader);//Wall on the Right
+		Wall3 = Graphics->ImportModel("Game/Models/source/sci_fi_wall2.obj", TextureShader);//Bottom part
 
-		//Created the texture
-		//TexturePtr TConcrete = Graphics->CreateTexture("Game/Textures/brick_pavement.jpg");
+		GoldCoin = Graphics->ImportModel("Game/Models/Primitives/Sphere.fbx", TextureShader);//Gold Sphere
+		RedCoin = Graphics->ImportModel("Game/Models/Primitives/Cube.fbx", TextureShader);//Red Cube
+		Background = Graphics->ImportModel("Game/Models/Primitives/Cube.fbx", TextureShader);//Cube
+		
+		//transform the meshes
+		Wall->Transform.Scale = Vector3(0.1f);
+		Wall->Transform.Location = Vector3(15.0f, -3.0f, -6.0f);
+		Wall2->Transform.Scale = Vector3(0.1f);
+		Wall2->Transform.Location = Vector3(15.0f, -3.0f, 6.0f);
+		Wall3->Transform.Scale = Vector3(4.0f);
+		Wall3->Transform.Rotation.x = 90.0f;
+		Wall3->Transform.Location = Vector3(25.0f, -2.0f, -7.0f);
+
+		GoldCoin->Transform.Location = Vector3(3.0f, 0.0f, 1.0f);
+		RedCoin->Transform.Location = Vector3(1.0f, 0.0f, -1.0f);
+		//Background->Transform.Scale = Vector3(10.0f);
+		Background->Transform.Location = Vector3(3.0f, 0.0f, 1.0f);
+
+		//create the texture
+		TexturePtr TWall = Graphics->CreateTexture("Game/Textures/Background2.jpg");
+		TexturePtr TWall2 = Graphics->CreateTexture("Game/Textures/Background2.jpg");
+		TexturePtr TWall3 = Graphics->CreateTexture("Game/Textures/TexturesCom.jpg");
+
 		TexturePtr TGoldCoins = Graphics->CreateTexture("Game/Textures/goldCoins.png");
 		TexturePtr TRedCoins = Graphics->CreateTexture("Game/Textures/goldCoins.png");
-		TexturePtr TBackground = Graphics->CreateTexture("Game/Textures/Entrytunnel.jpg");
-		//TexturePtr TBricks = Graphics->CreateTexture("Game/Textures/SquareBrown.jpg");
+		TexturePtr TBackground = Graphics->CreateTexture("Game/Textures/Background2.jpg");
+
+		//create the material
+		MaterialPtr MWall = make_shared<Material>();
+		MWall->BaseColour.TextureV3 = TWall;
+		MaterialPtr MWall2 = make_shared<Material>();
+		MWall2->BaseColour.TextureV3 = TWall2;
+		MaterialPtr MWall3 = make_shared<Material>();
+		MWall3->BaseColour.TextureV3 = TWall3;
 
 		//create the materials
-		//MaterialPtr MConcrete = make_shared<Material>();
 		MaterialPtr MGoldCoins = make_shared<Material>();
 		MaterialPtr MRedCoins = make_shared<Material>();
 		MaterialPtr MBackground = make_shared<Material>();
+		MGoldCoins->BaseColour.TextureV3 = TGoldCoins;
+		MRedCoins->BaseColour.TextureV3 = TRedCoins;
+		MBackground->BaseColour.TextureV3 = TBackground;
 
-		MGoldCoins->BaseColour = TGoldCoins;
-		MRedCoins->BaseColour = TRedCoins;
-		MBackground->BaseColour = TBackground;
-
-		//Create the vertex/meshes
-		GoldCoin = Graphics->CreateSimpleModelShape(GeometricShapes::Cube, TextureShader);
-		RedCoin = Graphics->CreateSimpleModelShape(GeometricShapes::Cube, TextureShader);
-		Background = Graphics->CreateSimpleModelShape(GeometricShapes::Cube, TextureShader);
-		//Wall = Graphics->CreateSimpleModelShape(GeometricShapes::Cube, TextureShader);
+		//apply the material
+		Wall->SetMaterialBySlot(1, MWall);
+		Wall2->SetMaterialBySlot(1, MWall2);
+		Wall3->SetMaterialBySlot(1, MWall3);
 
 		//set materials 
 		GoldCoin->SetMaterialBySlot(0, MGoldCoins);
 		RedCoin->SetMaterialBySlot(0, MRedCoins);
 		Background->SetMaterialBySlot(0, MBackground);
 
-		//created transformation for the meshes
-		GoldCoin->Transform.Location = Vector3(-1.0f, 0.0f, 1.0f);
-		RedCoin->Transform.Location = Vector3(1.0f, 0.0f, -1.0f);
-		Background->Transform.Scale = Vector3(10.0f);
-		Background->Transform.Location = Vector3(-1.0f, 0.0f, 1.0f);
-		
-		//import custom meshes
-		Wall = Graphics->ImportModel("Game/Models/source/WallDamaged.obj", TextureShader);
-		Wall2 = Graphics->ImportModel("Game/Models/source/WallDamaged.obj", TextureShader);
-		Wall3 = Graphics->ImportModel("Game/Models/source/WallDamaged.obj", TextureShader);
-		
-		//transform the meshes
-		Wall->Transform.Scale = Vector3(0.1f);
-		Wall->Transform.Location = Vector3(15.0f, -3.0f, -4.0f);
-		Wall2->Transform.Scale = Vector3(0.1f);
-		Wall2->Transform.Location = Vector3(15.0f, -3.0f, 6.0f);
-		Wall3->Transform.Scale = Vector3(0.1f);
-		Wall3->Transform.Rotation.x = 90.0f;
-		Wall3->Transform.Location = Vector3(15.0f, -3.0f, -3.0f);
-
-		//create the texture
-		TexturePtr TWall = Graphics->CreateTexture("Game/Textures/Background2.jpg");
-		TexturePtr TWall2 = Graphics->CreateTexture("Game/Textures/Background2.jpg");
-		TexturePtr TWall3 = Graphics->CreateTexture("Game/Textures/spacescene.jpg");
-
-		//create the material
-		MaterialPtr MWall = make_shared<Material>();
-		MWall->BaseColour = TWall;
-		MaterialPtr MWall2 = make_shared<Material>();
-		MWall2->BaseColour = TWall2;
-		MaterialPtr MWall3 = make_shared<Material>();
-		MWall3->BaseColour = TWall3;
-
-		//apply the material
-		Wall->SetMaterialBySlot(1, MWall);
-		Wall2->SetMaterialBySlot(1, MWall2);
-		Wall3->SetMaterialBySlot(1, MWall3);
+		GoldCoin->GetMaterialBySlot(0)->EmissiveColour.MultiplierV3 = Vector3(0.1f, 0.1f, 0.0f);
+		RedCoin->GetMaterialBySlot(0)->EmissiveColour.MultiplierV3 = Vector3(2.0f, 0.0f, 0.0f);
 	}
 
 	while (!bIsGameOver)
@@ -218,16 +218,6 @@ void Game::Update()
 	//move camera down
 	if (GameInput->IsKeyDown(SDL_SCANCODE_Q))
 		CameraInput += -CamDirections.Up;
-
-	////If the C key is pressed, it should reset the camera to its FOV degrees, 
-	////but I cannot make it work
-	//if (GameInput->IsKeyDown(SDL_SCANCODE_C))
-	//	Graphics->EngineDefaultCam->GetCameraData().FOV;
-
-	/*CameraInput *= 3.0f * GetFDeltaTime();
-
-	Vector3 NewLocation = Graphics->EngineDefaultCam->GetTransforms().Location += CameraInput;
-	Graphics->EngineDefaultCam->Translate(NewLocation);*/
 
 	Graphics->EngineDefaultCam->AddMovementInput(CameraInput);
 

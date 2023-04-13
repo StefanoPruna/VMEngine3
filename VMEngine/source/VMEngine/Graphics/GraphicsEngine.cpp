@@ -67,7 +67,7 @@ bool GraphicsEngine::InitGE(const char* WTitle, bool bFullscreen, int WWidth, in
 
 	//Create the SDL2 window
 	SdlWindow = SDL_CreateWindow(
-		WTitle,
+		"My Game",
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 		WWidth, WHeight,
 		FullscreenFlag

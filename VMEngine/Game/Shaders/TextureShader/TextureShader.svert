@@ -1,17 +1,37 @@
 #version 460 core
 
 layout(location = 0) in vec3 InPosition; // get the 0 attribute pointer
+layout(location = 1) in vec3 InNormals; // get the 1 attribute pointer
 layout(location = 2) in vec2 InTextCoords; // get the 2 attr pointer
 
 uniform mat4 model = mat4(1.0); //mat4(1.0,1.0,1.0,1.0,)
 uniform mat4 view = mat4(1.0); 
 uniform mat4 projection = mat4(1.0); 
 
+out vec3 VPosition;
+out vec3 VNormals;
 out vec2 TextCoords;
+
+out vec3 CamPosition;
 
 void main()
 {
+	//getting the vertex position relative to the models position in world space
+	VPosition = vec3(model * vec4(InPosition, 1.0));
+
+	//transpose() flips the matrix
+	//because we invert the matrix with inverse
+	//if we flip then invert the model matrix - we get the reflected value of the model
+	//multriplying by the normal value then gives us correct direction for light
+	VNormals = mat3(transpose(inverse(model))) * InNormals;
+
+	//passing the texture coordinates of the vertex to the fragment shader
+	TextCoords = InTextCoords;
+
+	//convert the view matrix into a readable vector 3 position
+	CamPosition = vec3(view);
+
+	//setting the vertex position on the screen
 	gl_Position = projection * view * model * vec4(InPosition, 1.0);
 	
-	TextCoords = InTextCoords;
 }

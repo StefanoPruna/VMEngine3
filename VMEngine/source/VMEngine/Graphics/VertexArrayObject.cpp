@@ -124,6 +124,8 @@ VertexArrayObject::VertexArrayObject(vector<Vertex> Vertices, vector<vmuint> Ind
 	this->Vertices = Vertices;
 	this->Indices = Indices;
 
+	glGenVertexArrays(1, &ID);
+
 	glBindVertexArray(ID);
 
 	//Create an ID for the array buffer

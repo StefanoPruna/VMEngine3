@@ -10,6 +10,7 @@ Mesh::Mesh()
 {
 	cout << "Mesh | Initialised Mesh" << endl;
 
+	MaterialSlot = 0;
 	//Transform.Location.x = 1.0f;
 	//Transform.Scale = Vector3(0.5f);
 	////Transform.Scale.y = Vector3(1.0f);
