@@ -76,28 +76,31 @@ void Game::Run()
 			L"Game/Shaders/TextureShader/TextureShader.sfrag"
 			});
 		
-		//import custom meshes
+		//import custom meshes for environment
 		Wall = Graphics->ImportModel("Game/Models/source/WallDamaged.obj", TextureShader);//Wall on the left
 		Wall2 = Graphics->ImportModel("Game/Models/source/WallDamaged.obj", TextureShader);//Wall on the Right
 		Wall3 = Graphics->ImportModel("Game/Models/source/sci_fi_wall2.obj", TextureShader);//Bottom part
+		Background = Graphics->ImportModel("Game/Models/source/sci_fi_wall.obj", TextureShader);//Bottom part
 
+		//for collectables
 		GoldCoin = Graphics->ImportModel("Game/Models/Primitives/Sphere.fbx", TextureShader);//Gold Sphere
 		RedCoin = Graphics->ImportModel("Game/Models/Primitives/Cube.fbx", TextureShader);//Red Cube
-		Background = Graphics->ImportModel("Game/Models/Primitives/Cube.fbx", TextureShader);//Cube
 		
 		//transform the meshes
 		Wall->Transform.Scale = Vector3(0.1f);
 		Wall->Transform.Location = Vector3(15.0f, -3.0f, -6.0f);
 		Wall2->Transform.Scale = Vector3(0.1f);
 		Wall2->Transform.Location = Vector3(15.0f, -3.0f, 6.0f);
-		Wall3->Transform.Scale = Vector3(4.0f);
+		Wall3->Transform.Scale = Vector3(6.0f);
 		Wall3->Transform.Rotation.x = 90.0f;
-		Wall3->Transform.Location = Vector3(25.0f, -2.0f, -7.0f);
+		Wall3->Transform.Location = Vector3(40.0f, 0.0f, -8.0f);
+		Background->Transform.Scale = Vector3(5.0f);
+		Background->Transform.Location = Vector3(38.0f, -12.0f, 0.0f);
+		Background->Transform.Rotation.y = 45.0f;
 
 		GoldCoin->Transform.Location = Vector3(3.0f, 0.0f, 1.0f);
 		RedCoin->Transform.Location = Vector3(1.0f, 0.0f, -1.0f);
 		//Background->Transform.Scale = Vector3(10.0f);
-		Background->Transform.Location = Vector3(3.0f, 0.0f, 1.0f);
 
 		//create the texture
 		TexturePtr TWall = Graphics->CreateTexture("Game/Textures/Background2.jpg");
@@ -106,7 +109,7 @@ void Game::Run()
 
 		TexturePtr TGoldCoins = Graphics->CreateTexture("Game/Textures/goldCoins.png");
 		TexturePtr TRedCoins = Graphics->CreateTexture("Game/Textures/goldCoins.png");
-		TexturePtr TBackground = Graphics->CreateTexture("Game/Textures/Background2.jpg");
+		TexturePtr TBackground = Graphics->CreateTexture("Game/Textures/text4.jpg");
 
 		//create the material
 		MaterialPtr MWall = make_shared<Material>();
@@ -134,7 +137,9 @@ void Game::Run()
 		RedCoin->SetMaterialBySlot(0, MRedCoins);
 		Background->SetMaterialBySlot(0, MBackground);
 
+		//Assign Yellow light
 		GoldCoin->GetMaterialBySlot(0)->EmissiveColour.MultiplierV3 = Vector3(0.1f, 0.1f, 0.0f);
+		//Assign Red light
 		RedCoin->GetMaterialBySlot(0)->EmissiveColour.MultiplierV3 = Vector3(2.0f, 0.0f, 0.0f);
 	}
 
