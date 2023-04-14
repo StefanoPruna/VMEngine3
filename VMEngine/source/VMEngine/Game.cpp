@@ -80,32 +80,42 @@ void Game::Run()
 		Wall = Graphics->ImportModel("Game/Models/source/WallDamaged.obj", TextureShader);//Wall on the left
 		Wall2 = Graphics->ImportModel("Game/Models/source/WallDamaged.obj", TextureShader);//Wall on the Right
 		Wall3 = Graphics->ImportModel("Game/Models/source/sci_fi_wall2.obj", TextureShader);//Bottom part
-		Background = Graphics->ImportModel("Game/Models/source/sci_fi_wall.obj", TextureShader);//Bottom part
+		Background = Graphics->ImportModel("Game/Models/source/sci_fi_wall.obj", TextureShader);//Divider
+		Wall4 = Graphics->ImportModel("Game/Models/source/WallDamaged.obj", TextureShader);//Wall on the Left
+		Wall5 = Graphics->ImportModel("Game/Models/source/WallDamaged.obj", TextureShader);//Wall on the Right
 
 		//for collectables
 		GoldCoin = Graphics->ImportModel("Game/Models/Primitives/Sphere.fbx", TextureShader);//Gold Sphere
 		RedCoin = Graphics->ImportModel("Game/Models/Primitives/Cube.fbx", TextureShader);//Red Cube
 		
 		//transform the meshes
-		Wall->Transform.Scale = Vector3(0.1f);
-		Wall->Transform.Location = Vector3(15.0f, -3.0f, -6.0f);
-		Wall2->Transform.Scale = Vector3(0.1f);
-		Wall2->Transform.Location = Vector3(15.0f, -3.0f, 6.0f);
+		Wall->Transform.Scale = Vector3(0.2f);
+		Wall->Transform.Location = Vector3(15.0f, -3.0f, -12.0f);
+		Wall2->Transform.Scale = Vector3(0.2f);
+		Wall2->Transform.Location = Vector3(15.0f, -3.0f, 15.0f);		
 		Wall3->Transform.Scale = Vector3(6.0f);
 		Wall3->Transform.Rotation.x = 90.0f;
-		Wall3->Transform.Location = Vector3(40.0f, 0.0f, -8.0f);
+		Wall3->Transform.Location = Vector3(38.0f, 0.0f, -8.0f);
 		Background->Transform.Scale = Vector3(5.0f);
 		Background->Transform.Location = Vector3(38.0f, -12.0f, 0.0f);
 		Background->Transform.Rotation.y = 45.0f;
+		Wall4->Transform.Location = Vector3(45.0f, -8.0f, -24.0f);
+		Wall4->Transform.Scale = Vector3(0.2f);
+		Wall4->Transform.Rotation.y = 45.0f;
+		Wall5->Transform.Location = Vector3(47.0f, -8.0f, 26.0f);
+		Wall5->Transform.Scale = Vector3(0.2f);
+		Wall5->Transform.Rotation.y = -45.0f;
 
+		//Collectables
 		GoldCoin->Transform.Location = Vector3(3.0f, 0.0f, 1.0f);
 		RedCoin->Transform.Location = Vector3(1.0f, 0.0f, -1.0f);
-		//Background->Transform.Scale = Vector3(10.0f);
 
 		//create the texture
 		TexturePtr TWall = Graphics->CreateTexture("Game/Textures/Background2.jpg");
 		TexturePtr TWall2 = Graphics->CreateTexture("Game/Textures/Background2.jpg");
 		TexturePtr TWall3 = Graphics->CreateTexture("Game/Textures/TexturesCom.jpg");
+		TexturePtr TWall4 = Graphics->CreateTexture("Game/Textures/Entrytunnel.jpg");
+		TexturePtr TWall5 = Graphics->CreateTexture("Game/Textures/Entrytunnel.jpg");
 
 		TexturePtr TGoldCoins = Graphics->CreateTexture("Game/Textures/goldCoins.png");
 		TexturePtr TRedCoins = Graphics->CreateTexture("Game/Textures/goldCoins.png");
@@ -118,6 +128,10 @@ void Game::Run()
 		MWall2->BaseColour.TextureV3 = TWall2;
 		MaterialPtr MWall3 = make_shared<Material>();
 		MWall3->BaseColour.TextureV3 = TWall3;
+		MaterialPtr MWall4 = make_shared<Material>();
+		MWall4->BaseColour.TextureV3 = TWall4;
+		MaterialPtr MWall5 = make_shared<Material>();
+		MWall5->BaseColour.TextureV3 = TWall5;
 
 		//create the materials
 		MaterialPtr MGoldCoins = make_shared<Material>();
@@ -131,6 +145,8 @@ void Game::Run()
 		Wall->SetMaterialBySlot(1, MWall);
 		Wall2->SetMaterialBySlot(1, MWall2);
 		Wall3->SetMaterialBySlot(1, MWall3);
+		Wall4->SetMaterialBySlot(1, MWall4);
+		Wall5->SetMaterialBySlot(1, MWall5);
 
 		//set materials 
 		GoldCoin->SetMaterialBySlot(0, MGoldCoins);

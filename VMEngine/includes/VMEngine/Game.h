@@ -69,4 +69,6 @@ private:
 	ModelPtr Wall;
 	ModelPtr Wall2;
 	ModelPtr Wall3;
+	ModelPtr Wall4;
+	ModelPtr Wall5;
 };
