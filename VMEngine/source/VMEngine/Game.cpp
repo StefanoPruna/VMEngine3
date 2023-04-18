@@ -7,7 +7,7 @@
 #include "VMEngine/Input.h"
 #include "VMEngine/Graphics/Camera.h"
 #include "VMEngine/Graphics/Material.h"
-#include "VMEngine/Menu.h"
+#include "VMEngine/Collisions/Collision.h"
 
 Game& Game::GetGameInstance()
 {
@@ -66,10 +66,6 @@ void Game::Run()
 	{
 		GameInput = new Input();
 
-		/*Menu* menu = new Menu();
-
-		menu->getMenu();*/
-
 		//create a shader
 		ShaderPtr TextureShader = Graphics->CreateShader({
 			L"Game/Shaders/TextureShader/TextureShader.svert",
@@ -88,6 +84,10 @@ void Game::Run()
 		GoldCoin = Graphics->ImportModel("Game/Models/Primitives/Sphere.fbx", TextureShader);//Gold Sphere
 		RedCoin = Graphics->ImportModel("Game/Models/Primitives/Cube.fbx", TextureShader);//Red Cube
 		
+		//Add Collision box to the objects
+		GoldCoin->AddCollisionToModel(Vector3(3.8f), Vector3(0.0f, 0.0f, 0.0f));
+		RedCoin->AddCollisionToModel(Vector3(2.3f));
+
 		//transform the meshes
 		Wall->Transform.Scale = Vector3(0.2f);
 		Wall->Transform.Location = Vector3(15.0f, -3.0f, -12.0f);
@@ -260,7 +260,16 @@ void Game::Update()
 
 void Game::Draw()
 {
+	Graphics->ClearGraphics();
+
 	Graphics->Draw();
+
+	/*if (GoldCoin != nullptr && RedCoin->GetCollision()->IsOverlapping(*GoldCoin->GetCollision()))
+		GoldCoin->GetCollision()->DebugDraw(Vector3(255.0f, 0.0f, 0.0f));
+	else
+		GoldCoin->GetCollision()->DebugDraw(Vector3(0.0f, 255.0f, 0.0f));*/
+
+	Graphics->PresentGraphics();
 }
 
 void Game::CloseGame()

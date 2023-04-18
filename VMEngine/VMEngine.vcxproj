@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="includes\stb_image\stb_image.h" />
+    <ClInclude Include="includes\VMEngine\Collisions\Collision.h" />
     <ClInclude Include="includes\VMEngine\CoreMinimal.h" />
     <ClInclude Include="includes\VMEngine\Game.h" />
     <ClInclude Include="includes\VMEngine\Graphics\Camera.h" />
@@ -147,12 +148,12 @@
     <ClInclude Include="includes\VMEngine\Graphics\VertexArrayObject.h" />
     <ClInclude Include="includes\VMEngine\Input.h" />
     <ClInclude Include="includes\VMEngine\Math\Transformations.h" />
-    <ClInclude Include="includes\VMEngine\Menu.h" />
     <ClInclude Include="includes\VMEngine\resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\Source.cpp" />
     <ClCompile Include="source\stb_image\stb_image.cpp" />
+    <ClCompile Include="source\VMEngine\Collisions\Collision.cpp" />
     <ClCompile Include="source\VMEngine\Game.cpp" />
     <ClCompile Include="source\VMEngine\Graphics\Camera.cpp" />
     <ClCompile Include="source\VMEngine\Graphics\GraphicsEngine.cpp" />
@@ -163,13 +164,14 @@
     <ClCompile Include="source\VMEngine\Graphics\Texture.cpp" />
     <ClCompile Include="source\VMEngine\Graphics\VertexArrayObject.cpp" />
     <ClCompile Include="source\VMEngine\Input.cpp" />
-    <ClCompile Include="source\VMEngine\Menu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Game\Shaders\TextureShader\TextureShader.sfrag" />
     <None Include="Game\Shaders\TextureShader\TextureShader.svert" />
     <None Include="Game\Shaders\VertexShader\VertexShader.sfrag" />
     <None Include="Game\Shaders\VertexShader\VertexShader.svert" />
+    <None Include="Game\Shaders\WireframeShader\WireframeShader.sfrag" />
+    <None Include="Game\Shaders\WireframeShader\WireframeShader.svert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

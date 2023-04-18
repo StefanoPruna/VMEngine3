@@ -36,6 +36,11 @@ public:
 	//it's a struct
 	CTransform Transform;
 
+	//return the collision for this model
+	CollisionPtr GetCollision() const { return ModelCollision; }
+
+	//add a collision to the model
+	CollisionPtr AddCollisionToModel(Vector3 Dimensions, Vector3 Offset = Vector3(0.0f));
 private:
 	//find all of the meshes in an import file/scene
 	void FindAndImportSceneMeshes(aiNode* Node, const aiScene* Scene);
@@ -54,4 +59,6 @@ private:
 
 	//imported file path
 	const char* ModelFilePath;
+
+	CollisionPtr ModelCollision;
 };

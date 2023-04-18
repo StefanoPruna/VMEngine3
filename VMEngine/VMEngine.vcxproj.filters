@@ -57,10 +57,10 @@
     <ClInclude Include="includes\VMEngine\Graphics\Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="includes\VMEngine\Menu.h">
+    <ClInclude Include="includes\VMEngine\resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="includes\VMEngine\resource.h">
+    <ClInclude Include="includes\VMEngine\Collisions\Collision.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -101,7 +101,7 @@
     <ClCompile Include="source\VMEngine\Graphics\Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\VMEngine\Menu.cpp">
+    <ClCompile Include="source\VMEngine\Collisions\Collision.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -110,5 +110,7 @@
     <None Include="Game\Shaders\VertexShader\VertexShader.sfrag" />
     <None Include="Game\Shaders\TextureShader\TextureShader.svert" />
     <None Include="Game\Shaders\TextureShader\TextureShader.sfrag" />
+    <None Include="Game\Shaders\WireframeShader\WireframeShader.svert" />
+    <None Include="Game\Shaders\WireframeShader\WireframeShader.sfrag" />
   </ItemGroup>
 </Project>

@@ -43,6 +43,13 @@ typedef shared_ptr<Camera> CameraPtr;
 typedef vector<float> PositionMatrix;
 typedef vector<vmuint> IndicesMatrix;
 
+class Collision;
+typedef shared_ptr<Collision> CollisionPtr;
+typedef vector<Collision> CollisionPtrStack;
+
+class BoxCollision;
+typedef shared_ptr<BoxCollision> BoxCollisionPtr;
+
 struct ShapeData
 {
 	vector<float> PositionMatrix;
