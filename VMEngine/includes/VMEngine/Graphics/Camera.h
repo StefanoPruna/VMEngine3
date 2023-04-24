@@ -17,7 +17,7 @@ struct STCameraData
 	float FarClip = 1000.0f;
 
 	//the speed at which the camera turn is multiplied
-	float LookSensitivity = 20.0f;
+	float LookSensitivity = 0.5f;
 };
 
 class Camera
@@ -46,6 +46,12 @@ public:
 	void RotatePitch(float Amount);
 
 	void RotateYaw(float Amount);
+
+	//Update camera logic
+	void Update();
+
+	//get the collision for the camera
+	CollisionPtr GetCameraCollision() const { return CameraCollision; }
 private:
 	//Transforms of the camera
 	//Location, Rotation and Scale (but we don't need Scale)
@@ -59,4 +65,7 @@ private:
 
 	//find the current direction vectors based on the rotation of the YAW and PITCH of the camera
 	void UpdateDirectionVectors();
+
+	//add a camera collision
+	CollisionPtr CameraCollision;
 };

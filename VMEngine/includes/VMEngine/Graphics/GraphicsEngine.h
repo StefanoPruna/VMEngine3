@@ -1,6 +1,6 @@
 #pragma once
 #include "VMEngine/CoreMinimal.h"
-#include "SDL2//SDL.h"
+#include "SDL2/SDL.h"
 #include "VMEngine/Math/Transformations.h"
 
 class GraphicsEngine
@@ -46,6 +46,12 @@ public:
 
 	//default material
 	MaterialPtr DefaultEngineMaterial;
+
+	//remove a model from the model stack
+	void RemoveModel(ModelPtr ModelToRemove);
+
+	SDL_Renderer* UIRenderer;
+
 private:
 	SDL_Window* SdlWindow;
 

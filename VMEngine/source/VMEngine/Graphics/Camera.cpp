@@ -1,6 +1,7 @@
 #include "VMEngine/Graphics/Camera.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "VMEngine/Game.h"
+#include "VMEngine/Collisions/Collision.h"
 
 Camera::Camera()
 {
@@ -11,6 +12,11 @@ Camera::Camera()
 	UpdateDirectionVectors();
 
 	Transform.Location += -Directions.Forward * 2.0f;
+
+	//@param1 - Position of collision
+	//@param2 - Offset of the location
+	//@param3 - Size of the camera collision
+	CameraCollision = make_shared<BoxCollision>(Transform.Location, Vector3(0.0f), Vector3(1.0f));
 }
 
 void Camera::Translate(Vector3 Location)
@@ -70,6 +76,12 @@ void Camera::RotateYaw(float Amount)
 	Transform.Rotation.y = glm::mod(Transform.Rotation.y, 360.0f);
 
 	UpdateDirectionVectors();
+}
+
+void Camera::Update()
+{
+	if (CameraCollision != nullptr)
+		CameraCollision->SetLocation(Transform.Location);
 }
 
 void Camera::UpdateDirectionVectors()

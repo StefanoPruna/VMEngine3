@@ -6,7 +6,7 @@ uniform mat4 model = mat4(1.0); //mat4(1.0,1.0,1.0,1.0,)
 uniform mat4 view = mat4(1.0);
 uniform mat4 projection = mat4(1.0);
 
-uniform vec3 InColour = vec3(255.0f);
+uniform vec3 InColour = vec3(0.0f);
 out vec4 Colour;
 
 void main()

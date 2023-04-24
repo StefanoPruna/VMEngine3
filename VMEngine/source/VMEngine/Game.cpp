@@ -8,6 +8,7 @@
 #include "VMEngine/Graphics/Camera.h"
 #include "VMEngine/Graphics/Material.h"
 #include "VMEngine/Collisions/Collision.h"
+#include "VMEngine/Graphics/TextScreen.h"
 
 Game& Game::GetGameInstance()
 {
@@ -43,6 +44,15 @@ TexturePtr Game::GetDefaultEngineTexture()
 MaterialPtr Game::GetDefaultEngineMaterial()
 {
 	return Graphics->DefaultEngineMaterial;
+}
+
+void Game::RemoveModelFromGame(ModelPtr& ModelToRemove)
+{
+	//remove from the graphics engine
+	Graphics->RemoveModel(ModelToRemove);
+
+	//change the reference to nullptr and remove from the game
+	ModelToRemove = nullptr;
 }
 
 Game::Game()
@@ -85,8 +95,8 @@ void Game::Run()
 		RedCoin = Graphics->ImportModel("Game/Models/Primitives/Cube.fbx", TextureShader);//Red Cube
 		
 		//Add Collision box to the objects
-		GoldCoin->AddCollisionToModel(Vector3(3.8f), Vector3(0.0f, 0.0f, 0.0f));
-		RedCoin->AddCollisionToModel(Vector3(2.3f));
+		GoldCoin->AddCollisionToModel(Vector3(1.9f), Vector3(0.0f, 0.0f, 0.0f));
+		RedCoin->AddCollisionToModel(Vector3(1.3f));
 
 		//transform the meshes
 		Wall->Transform.Scale = Vector3(0.2f);
@@ -175,51 +185,37 @@ void Game::ProcessInput()
 {
 	//run the input detection for our game input
 	GameInput->ProcessInput();
-}
-
-void Game::Update()
-{
-	//set delta time first always
-	static double LastFrameTime = 0.0;
-	//set current time since the game has passed
-	double CurrentFrameTime = static_cast<double>(SDL_GetTicks64());
-	//find the time difference between the last and current frame
-	double NewDeltaTime = CurrentFrameTime - LastFrameTime;
-	//set delta time as seconds
-	DeltaTime = NewDeltaTime / 1000.0;
-	//update the last frame time for the next update
-	LastFrameTime = CurrentFrameTime;
-
-	RedCoin->Transform.Rotation.z += 25.0f * GetFDeltaTime();
-	RedCoin->Transform.Rotation.x += 25.0f * GetFDeltaTime();
-	RedCoin->Transform.Rotation.y += 25.0f * GetFDeltaTime();
-
-	GoldCoin->Transform.Rotation.z += -25.0f * GetFDeltaTime();
-	GoldCoin->Transform.Rotation.x += -25.0f * GetFDeltaTime();
-	GoldCoin->Transform.Rotation.y += -25.0f * GetFDeltaTime();
 
 	Vector3 CameraInput = Vector3(0.0f);
 	CDirection CamDirections = Graphics->EngineDefaultCam->GetDirections();
 
 	//Moving objects right and left, or up and down
 	static int Move = 1.0f;
-	//Move up and down
-	if (GoldCoin->Transform.Location.y > 2.5f)
-		Move = -1.0f;
 
-	if (GoldCoin->Transform.Location.y < -2.5f)
-		Move = 1.0f;
-	//speed of the object
-	GoldCoin->Transform.Location.y += (1.5f * Move) * GetFDeltaTime();
+	if (GoldCoin != nullptr)
+	{
+		//Move up and down
+		if (GoldCoin->Transform.Location.y > 2.5f)
+			Move = -1.0f;
 
-	//right and left
-	if (RedCoin->Transform.Location.z > 3.0f)
-		Move = -1.0f;
+		if (GoldCoin->Transform.Location.y < -2.5f)
+			Move = 1.0f;
+		//speed of the object
+		GoldCoin->Transform.Location.y += (1.5f * Move) * GetFDeltaTime();
+	}
 
-	if (RedCoin->Transform.Location.z < -3.0f)
-		Move = 1.0f;
-	//speed of the object
-	RedCoin->Transform.Location.x += (1.0f * Move) * GetFDeltaTime();
+	if (RedCoin != nullptr)
+	{
+		//right and left
+		if (RedCoin->Transform.Location.z > 3.0f)
+			Move = -1.0f;
+
+		if (RedCoin->Transform.Location.z < -3.0f)
+			Move = 1.0f;
+		//speed of the object
+		RedCoin->Transform.Location.x += (1.0f * Move) * GetFDeltaTime();
+	}
+	
 
 	//move camera forward
 	if (GameInput->IsKeyDown(SDL_SCANCODE_W))
@@ -244,18 +240,52 @@ void Game::Update()
 
 	if (GameInput->IsMouseButtonDown(MouseButtons::RIGHT))
 	{
-		Graphics->EngineDefaultCam->RotatePitch(-GameInput->MouseYDelta * GetFDeltaTime());
-		Graphics->EngineDefaultCam->RotateYaw(GameInput->MouseXDelta * GetFDeltaTime());
+		Graphics->EngineDefaultCam->RotatePitch(-GameInput->MouseYDelta);
+		Graphics->EngineDefaultCam->RotateYaw(GameInput->MouseXDelta);
 		GameInput->ShowCursor(false);
 	}
 	else
 		GameInput->ShowCursor(true);
+}
+
+void Game::Update()
+{
+	//set delta time first always
+	static double LastFrameTime = 0.0;
+	//set current time since the game has passed
+	double CurrentFrameTime = static_cast<double>(SDL_GetTicks64());
+	//find the time difference between the last and current frame
+	double NewDeltaTime = CurrentFrameTime - LastFrameTime;
+	//set delta time as seconds
+	DeltaTime = NewDeltaTime / 1000.0;
+	//update the last frame time for the next update
+	LastFrameTime = CurrentFrameTime;
+
+	if (RedCoin != nullptr)
+	{
+		RedCoin->Transform.Rotation.z += 25.0f * GetFDeltaTime();
+		RedCoin->Transform.Rotation.x += 25.0f * GetFDeltaTime();
+		RedCoin->Transform.Rotation.y += 25.0f * GetFDeltaTime();
+	}
+
+	if (GoldCoin != nullptr)
+	{
+		GoldCoin->Transform.Rotation.z += -25.0f * GetFDeltaTime();
+		GoldCoin->Transform.Rotation.x += -25.0f * GetFDeltaTime();
+		GoldCoin->Transform.Rotation.y += -25.0f * GetFDeltaTime();
+	}
 		
-	////test mouse inputs
-	//if (GameInput->IsMouseButtonDown(MouseButtons::MIDDLE))
-	//	cout << "middle mouse button down" << endl;
-	//else
-	//	cout << "middle mouse button up" << endl;
+	Graphics->EngineDefaultCam->Update();
+
+	//do collision stuff
+	CollisionPtr CamCol = Graphics->EngineDefaultCam->GetCameraCollision();
+
+	//if the camera runs into the coin, the coin will be removed
+	if (GoldCoin != nullptr && CamCol->IsOverlapping(*GoldCoin->GetCollision()))
+		RemoveModelFromGame(GoldCoin);
+
+	if (RedCoin != nullptr && CamCol->IsOverlapping(*RedCoin->GetCollision()))
+		RemoveModelFromGame(RedCoin);
 }
 
 void Game::Draw()
@@ -264,10 +294,21 @@ void Game::Draw()
 
 	Graphics->Draw();
 
-	/*if (GoldCoin != nullptr && RedCoin->GetCollision()->IsOverlapping(*GoldCoin->GetCollision()))
-		GoldCoin->GetCollision()->DebugDraw(Vector3(255.0f, 0.0f, 0.0f));
+	/*TextScreen* scoreText = new TextScreen(20, "Game/Textures/arial.ttf", 600, 20);
+	scoreText->draw();*/
+
+	//debug draw the camera collision
+	CollisionPtr CamCol = Graphics->EngineDefaultCam->GetCameraCollision();
+
+	if (GoldCoin != nullptr && CamCol->IsOverlapping(*GoldCoin->GetCollision()))
+		CamCol->DebugDraw(Vector3(0.0f, 255.0f, 0.0f));
 	else
-		GoldCoin->GetCollision()->DebugDraw(Vector3(0.0f, 255.0f, 0.0f));*/
+		CamCol->DebugDraw(Vector3(255.0f, 0.0f, 0.0f));
+
+	if (RedCoin != nullptr && CamCol->IsOverlapping(*RedCoin->GetCollision()))
+		CamCol->DebugDraw(Vector3(0.0f, 255.0f, 0.0f));
+	else
+		CamCol->DebugDraw(Vector3(255.0f, 0.0f, 0.0f));
 
 	Graphics->PresentGraphics();
 }

@@ -10,6 +10,7 @@
 #include "VMEngine/Graphics/Camera.h"
 #include "VMEngine/Graphics/Material.h"
 #include "VMEngine/Collisions/Collision.h"
+#include "VMEngine/Graphics/TextScreen.h"
 
 GraphicsEngine::GraphicsEngine()
 {
@@ -17,6 +18,7 @@ GraphicsEngine::GraphicsEngine()
 	SdlGLContext = NULL;
 	bWireFrameMode = false;
 	EngineDefaultCam = make_shared<Camera>();
+	//ScoreText = nullptr;
 }
 
 GraphicsEngine::~GraphicsEngine()
@@ -100,6 +102,15 @@ bool GraphicsEngine::InitGE(const char* WTitle, bool bFullscreen, int WWidth, in
 		return false;
 	}
 
+	//UIRenderer = SDL_CreateRenderer(SdlWindow, 0, NULL);
+
+	//if (UIRenderer == NULL)
+	//	return false;
+
+	////run TTF and fail if it fails
+	//if (TTF_Init() == -1)
+	//	return false;
+
 	//enable 3D depth
 	glEnable(GL_DEPTH_TEST);
 
@@ -109,6 +120,9 @@ bool GraphicsEngine::InitGE(const char* WTitle, bool bFullscreen, int WWidth, in
 	//create the default engine material
 	//materials when created 
 	DefaultEngineMaterial = make_shared<Material>();
+
+	/*SDL_Color TextColour = { 255 };
+	ScoreText = make_shared<Text>("Score: 0", 25, 25, &TextColour);*/
 
 	return true;
 }
@@ -140,6 +154,10 @@ void GraphicsEngine::Draw()
 	{
 		LModel->Draw();
 	}
+
+	/*SDL_RenderClear(UIRenderer);
+
+	SDL_RenderPresent(UIRenderer);*/
 }
 
 SDL_Window* GraphicsEngine::GetWindow() const
@@ -253,6 +271,21 @@ void GraphicsEngine::ApplyScreenTransformations(ShaderPtr Shader)
 
 	Shader->SetMat4("view", view);
 	Shader->SetMat4("projection", projection);
+}
+
+void GraphicsEngine::RemoveModel(ModelPtr ModelToRemove)
+{
+	//looking for the model in the model stack vector array
+	//we look through the whole vector and if we find the value then we assign the correct index
+	//this will equal .end() if it doesn't exist in the stack
+	ModelPtrStack::iterator ModelIndex = find(ModelStack.begin(), ModelStack.end(), ModelToRemove);
+
+	//if it's not in the array, then stop the function
+	if (ModelIndex == ModelStack.end())
+		return;
+
+	//use the iterator/index to erase the object, but it doesn't remove it
+	ModelStack.erase(ModelIndex);
 }
 
 void GraphicsEngine::HandleWireFrameMode(bool bShowWireFrameMode)
