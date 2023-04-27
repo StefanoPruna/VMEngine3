@@ -10,7 +10,6 @@
 #include "VMEngine/Graphics/Camera.h"
 #include "VMEngine/Graphics/Material.h"
 #include "VMEngine/Collisions/Collision.h"
-#include "VMEngine/Graphics/TextScreen.h"
 
 GraphicsEngine::GraphicsEngine()
 {
